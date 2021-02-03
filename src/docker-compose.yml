@@ -1,0 +1,15 @@
+version: '3'
+services:
+  baldr:
+    build:
+      context: ./app
+    ports:
+      - "3000:3000"
+    container_name: baldr
+    stdin_open: true
+    volumes:
+      - ./app:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/.next
+    env_file:
+      - ./app/.env
