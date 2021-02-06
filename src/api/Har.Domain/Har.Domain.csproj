@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <AssemblyName>Har.Domain</AssemblyName>
+        <RootNamespace>Har.Domain</RootNamespace>
+    </PropertyGroup>
+
+</Project>

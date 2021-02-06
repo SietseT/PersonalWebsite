@@ -1,16 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using GraphQL.Server;
+using GraphQL.Types;
+using Har.Application.GraphQL.Queries;
+using Har.Application.GraphQL.Schemas;
+using Har.Application.GraphQL.Types;
+using Har.Application.Services;
+using Har.Infrastructure;
+using Har.Infrastructure.Data.Kontent.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 
 namespace Har
 {
@@ -26,8 +27,26 @@ namespace Har
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "Har", Version = "v1"}); });
+            services.Configure<KestrelServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
+            
+            services.AddSingleton<IProjectRepository, KontentProjectRepository>();
+
+            services.AddSingleton<ProjectType>();
+            services.AddSingleton<ProjectsQuery>();
+
+            services.AddSingleton<ISchema, ProjectsSchema>();
+
+            services.AddGraphQL((options, _) =>
+            {
+                options.EnableMetrics = true;
+            })
+            .AddErrorInfoProvider(opt => opt.ExposeExceptionStackTrace = true)
+            .AddSystemTextJson();
+            
+            services.AddInfrastructure(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,17 +55,15 @@ namespace Har
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Har v1"));
             }
 
+            app.UseGraphQL<ISchema>();
+            
+            app.UseGraphiQLServer();
             app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
         }
     }
 }
