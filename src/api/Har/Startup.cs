@@ -39,12 +39,9 @@ namespace Har
 
             services.AddSingleton<ISchema, ProjectsSchema>();
 
-            services.AddGraphQL((options, _) =>
-            {
-                options.EnableMetrics = true;
-            })
-            .AddErrorInfoProvider(opt => opt.ExposeExceptionStackTrace = true)
-            .AddSystemTextJson();
+            services.AddGraphQL()
+                .AddErrorInfoProvider(opt => opt.ExposeExceptionStackTrace = true)
+                .AddSystemTextJson();
             
             services.AddInfrastructure(Configuration);
         }

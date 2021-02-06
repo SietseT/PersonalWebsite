@@ -9,6 +9,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="AngleSharp" Version="0.14.0" />
       <PackageReference Include="GraphQL" Version="3.3.2" />
       <PackageReference Include="GraphQL.NewtonsoftJson" Version="3.3.2" />
       <PackageReference Include="Kentico.Kontent.Delivery" Version="14.2.1" />

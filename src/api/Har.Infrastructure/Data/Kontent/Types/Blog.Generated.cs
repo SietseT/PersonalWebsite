@@ -8,9 +8,9 @@ using System;
 using System.Collections.Generic;
 using Kentico.Kontent.Delivery.Abstractions;
 
-namespace Har.Infrastructure.Data.Kontent.Types
+namespace Har.Infrastructure.Data.KontentTypes
 {
-    internal partial class Blog
+    public partial class Blog
     {
         public const string Codename = "blog";
         public const string BlogTypeCodename = "blog_type";

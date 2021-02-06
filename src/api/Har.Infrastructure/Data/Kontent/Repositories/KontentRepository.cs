@@ -9,9 +9,9 @@ namespace Har.Infrastructure.Data.Kontent.Repositories
     public class KontentRepository<TKontentType, TReturnType>
     {
         private readonly IDeliveryClient _deliveryClient;
-        private readonly Func<TKontentType, TReturnType> _mapperFunction;
+        private readonly Func<TKontentType, Task<TReturnType>> _mapperFunction;
 
-        protected KontentRepository(IDeliveryClient deliveryClient, Func<TKontentType, TReturnType> mapperFunction)
+        protected KontentRepository(IDeliveryClient deliveryClient, Func<TKontentType, Task<TReturnType>> mapperFunction)
         {
             _deliveryClient = deliveryClient;
             _mapperFunction = mapperFunction;
@@ -19,14 +19,18 @@ namespace Har.Infrastructure.Data.Kontent.Repositories
 
         protected async Task<TReturnType> GetItemAsync(string codeName)
         {
-            var item = await _deliveryClient.GetItemAsync<TKontentType>(codeName);
-            return _mapperFunction.Invoke(item.Item);
+            var response = await _deliveryClient.GetItemAsync<TKontentType>(codeName);
+
+            if (response.Item == null)
+                return default;
+            
+            return await _mapperFunction.Invoke(response.Item);
         }
 
         protected async Task<IEnumerable<TReturnType>> GetItemsAsync()
         {
             var items = await _deliveryClient.GetItemsAsync<TKontentType>();
-            return items.Items.Select(_mapperFunction);
+            return await Task.WhenAll(items.Items.Select(async item => await _mapperFunction.Invoke(item)));
         }
     }
 }

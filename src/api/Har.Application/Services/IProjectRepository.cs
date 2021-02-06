@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Har.Domain.Components;
 using Har.Domain.Models;
 
 namespace Har.Application.Services

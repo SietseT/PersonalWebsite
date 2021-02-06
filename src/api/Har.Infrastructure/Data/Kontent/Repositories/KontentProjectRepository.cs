@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AngleSharp;
 using Har.Application.Services;
 using Har.Infrastructure.Data.Kontent.Types;
 using Kentico.Kontent.Delivery.Abstractions;
@@ -18,11 +20,11 @@ namespace Har.Infrastructure.Data.Kontent.Repositories
             _logger = logger;
         }
 
-        public Task<Har.Domain.Models.Project> GetProjectByIdAsync(string id)
+        public async Task<Har.Domain.Models.Project> GetProjectByIdAsync(string id)
         {
             try
             {
-                return GetItemAsync(id);
+                return await GetItemAsync(id);
             }
             catch (Exception ex)
             {
@@ -32,11 +34,11 @@ namespace Har.Infrastructure.Data.Kontent.Repositories
             }
         }
 
-        public Task<IEnumerable<Har.Domain.Models.Project>> GetProjectsAsync()
+        public async Task<IEnumerable<Har.Domain.Models.Project>> GetProjectsAsync()
         {
             try
             {
-                return GetItemsAsync();
+                return await GetItemsAsync();
             }
             catch (Exception ex)
             {
@@ -45,16 +47,30 @@ namespace Har.Infrastructure.Data.Kontent.Repositories
             }
         }
 
-        private static Har.Domain.Models.Project Map(Project project)
+        private static async Task<Har.Domain.Models.Project> Map(Project project)
         {
             return new()
             {
+                Id = project.System.Codename,
                 Name = project.System.Name,
+                Author = project.Author,
+                Content = project.Content,
                 Url = project.SiteUrl,
                 OnlineSince = project.OnlineSince ?? DateTime.MinValue,
                 ShortDescription = project.ShortDescription,
-                Technologies = project.Technologies
+                Technologies = await GetTechnologiesFromHtml(project.Technologies)
             };
+        }
+
+        private static async Task<IEnumerable<string>> GetTechnologiesFromHtml(string html)
+        {
+            var config = Configuration.Default;
+            var context = BrowsingContext.New(config);
+            var document = await context.OpenAsync(req => req.Content(html));
+
+            var listItems = document.QuerySelectorAll("li");
+
+            return listItems.Select(l => l.TextContent);
         }
     }
 }
