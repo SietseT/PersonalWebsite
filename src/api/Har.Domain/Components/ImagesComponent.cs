@@ -4,7 +4,7 @@ namespace Har.Domain.Components
 {
     public class ImagesComponent : IComponent
     {
-        public string Name => "images";
+        public string Type => "images";
         public IEnumerable<Image> Images { get; set; }
     }
 

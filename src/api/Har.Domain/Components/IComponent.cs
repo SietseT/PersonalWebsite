@@ -2,6 +2,6 @@
 {
     public interface IComponent
     {
-        string Name { get; }
+        string Type { get; }
     }
 }

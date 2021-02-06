@@ -14,6 +14,5 @@ namespace Har.Domain.Models
         public DateTime OnlineSince { get; set; }
         public string ShortDescription { get; set; }
         public IEnumerable<string> Technologies { get; set; }
-        public IEnumerable<IComponent> Components { get; set; }
     }
 }

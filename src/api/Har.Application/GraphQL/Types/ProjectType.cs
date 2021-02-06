@@ -1,4 +1,7 @@
-﻿using GraphQL.Types;
+﻿using System;
+using GraphQL.Types;
+using Har.Application.Components;
+using Har.Application.GraphQL.Interfaces;
 using Har.Domain.Components;
 using Har.Domain.Models;
 
@@ -17,10 +20,36 @@ namespace Har.Application.GraphQL.Types
             Field(p => p.ShortDescription);
             Field(p => p.Content);
             
-            Field<ListGraphType<ComponentInterface>>("components", resolve: context =>
-            {
-                return null;
-            });
+            Field<ComponentsType>("components", 
+                resolve: context =>
+                {
+                    return new IComponent[]
+                    {
+                        new TextComponent
+                        {
+                            Content = "Text component 1",
+                        },
+                        // new ImagesComponent
+                        // {
+                        //     Images = new[]
+                        //     {
+                        //         new Image
+                        //         {
+                        //             ImageUrl = "https://www.elunduscore.com/images/monkaw_sm.png"
+                        //         },
+                        //         new Image
+                        //         {
+                        //             ImageUrl = "https://www.elunduscore.com/images/monkaw_sm.png"
+                        //         }
+                        //     }
+                        // },
+                        new TextComponent
+                        {
+                            Content = "Text component 2",
+                        },
+                    };
+                    // return componentParser.Parse(context.Source.Content);
+                });
         }
     }
 }

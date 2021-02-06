@@ -1,5 +1,7 @@
 using GraphQL.Server;
 using GraphQL.Types;
+using Har.Application.Components;
+using Har.Application.GraphQL.Interfaces;
 using Har.Application.GraphQL.Queries;
 using Har.Application.GraphQL.Schemas;
 using Har.Application.GraphQL.Types;
@@ -32,10 +34,17 @@ namespace Har
                 options.AllowSynchronousIO = true;
             });
             
+            services.AddSingleton<IComponentParser<string>, HtmlComponentParser>();
+            
             services.AddSingleton<IProjectRepository, KontentProjectRepository>();
 
+            services.AddSingleton<ComponentsType>();
+            
             services.AddSingleton<ProjectType>();
             services.AddSingleton<ProjectsQuery>();
+            
+            services.AddSingleton<ComponentInterface>();
+            services.AddSingleton<TextComponentType>();
 
             services.AddSingleton<ISchema, ProjectsSchema>();
 

@@ -2,7 +2,7 @@
 {
     public class TextComponent : IComponent
     {
-        public string Name => "text";
+        public string Type => "text";
         public string Content { get; set; }
     }
 }
