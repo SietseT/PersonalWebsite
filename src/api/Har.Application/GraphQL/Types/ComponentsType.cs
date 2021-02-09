@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using GraphQL;
 using GraphQL.Language.AST;
 using GraphQL.Types;
 using Har.Application.GraphQL.ValueNodes;
+using Har.Application.JsonConverters;
 using Har.Domain.Components;
 
 namespace Har.Application.GraphQL.Types
@@ -32,7 +35,13 @@ namespace Har.Application.GraphQL.Types
 
         public override object Serialize(object value)
         {
-            return ValueConverter.ConvertTo(value, typeof(IEnumerable<IComponent>));
+            return JsonSerializer.Serialize(value, new JsonSerializerOptions
+            {
+                Converters = { new ComponentJsonConverter()},
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
+            
+            // return ValueConverter.ConvertTo(value, typeof(IEnumerable<IComponent>)); 
         }
     }
 }
