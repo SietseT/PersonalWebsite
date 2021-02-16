@@ -1,11 +1,8 @@
-﻿using System;
-using GraphQL.Types;
-using Har.Application.Components;
-using Har.Application.GraphQL.Interfaces;
+﻿using GraphQL.Types;
 using Har.Domain.Components;
 using Har.Domain.Models;
 
-namespace Har.Application.GraphQL.Types
+namespace Har.GraphQL.Types
 {
     public sealed class ProjectType : ObjectGraphType<Project>
     {

@@ -2,10 +2,10 @@
 using GraphQL;
 using GraphQL.Types;
 using GraphQL.Utilities;
-using Har.Application.GraphQL.Types;
 using Har.Application.Services;
+using Har.GraphQL.Types;
 
-namespace Har.Application.GraphQL.Queries
+namespace Har.GraphQL.Queries
 {
     public class ProjectsQuery : ObjectGraphType<object>
     {

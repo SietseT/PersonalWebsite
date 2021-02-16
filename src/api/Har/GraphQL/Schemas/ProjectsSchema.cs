@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
 using GraphQL;
 using GraphQL.Types;
 using GraphQL.Utilities;
 using Har.Application.Components;
-using Har.Application.GraphQL.Queries;
-using Har.Application.GraphQL.Types;
-using Har.Application.GraphQL.ValueNodes;
 using Har.Domain.Components;
+using Har.GraphQL.Queries;
+using Har.GraphQL.Types;
+using Har.GraphQL.ValueNodes;
 
-namespace Har.Application.GraphQL.Schemas
+namespace Har.GraphQL.Schemas
 {
     public class ProjectsSchema : Schema
     {

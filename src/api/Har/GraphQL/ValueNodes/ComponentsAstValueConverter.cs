@@ -3,7 +3,7 @@ using GraphQL.Language.AST;
 using GraphQL.Types;
 using Har.Domain.Components;
 
-namespace Har.Application.GraphQL.ValueNodes
+namespace Har.GraphQL.ValueNodes
 {
     public class ComponentsAstValueConverter : IAstFromValueConverter
     {

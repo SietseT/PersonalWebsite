@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using GraphQL;
 using GraphQL.Language.AST;
 using GraphQL.Types;
-using Har.Application.GraphQL.ValueNodes;
 using Har.Application.JsonConverters;
 using Har.Domain.Components;
+using Har.GraphQL.ValueNodes;
 
-namespace Har.Application.GraphQL.Types
+namespace Har.GraphQL.Types
 {
     public class ComponentsType : ScalarGraphType
     {

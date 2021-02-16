@@ -1,9 +1,8 @@
-﻿using System.Runtime.CompilerServices;
-using GraphQL.Types;
-using Har.Application.GraphQL.Interfaces;
+﻿using GraphQL.Types;
 using Har.Domain.Components;
+using Har.GraphQL.Interfaces;
 
-namespace Har.Application.GraphQL.Types
+namespace Har.GraphQL.Types
 {
     public class TextComponentType : ObjectGraphType<TextComponent>
     {
