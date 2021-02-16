@@ -1,4 +1,6 @@
-﻿using Kentico.Kontent.Delivery;
+﻿using Har.Infrastructure.Data.Kontent.Resolvers;
+using Har.Infrastructure.Data.Kontent.Types;
+using Kentico.Kontent.Delivery;
 using Kentico.Kontent.Delivery.Abstractions;
 using Kentico.Kontent.Delivery.Extensions;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +13,13 @@ namespace Har.Infrastructure
         public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddHttpClient<IDeliveryHttpClient, DeliveryHttpClient>();
-            services.AddDeliveryClient(configuration);
+            services.AddDeliveryInlineContentItemsResolver<ImageSlider, ImageSliderResolver>();
+            services.AddSingleton<ITypeProvider, CustomTypeProvider>();
+            
+            services.AddDeliveryClient(builder => builder
+                .WithProjectId(configuration.GetValue<string>("DeliveryOptions:ProjectId"))
+                .UseProductionApi()
+                .Build());
         }
     }
 }
