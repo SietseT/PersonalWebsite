@@ -35,8 +35,6 @@ namespace Har
             });
             
             services.AddSingleton<IComponentParser<string>, HtmlComponentParser>();
-            
-            services.AddSingleton<IProjectRepository, KontentProjectRepository>();
 
             services.AddSingleton<ComponentsType>();
             
