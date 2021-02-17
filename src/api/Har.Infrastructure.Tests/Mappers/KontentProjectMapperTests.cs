@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Har.Infrastructure.Data.Kontent.Mappers;
 using Har.Infrastructure.Data.Kontent.Types;
 using Kentico.Kontent.Delivery.Abstractions;
@@ -16,12 +17,12 @@ namespace Har.Infrastructure.Tests.Mappers
         private const string SiteUrl = "https://elunduscore.com";
         
         [Fact]
-        public void KontentProject_ReturnsMappedProject()
+        public async Task KontentProject_ReturnsMappedProject()
         {
             var onlineSince = DateTime.Now;
             var kontentProject = GetKontentProject(onlineSince);
 
-            var mappedProject = KontentMappers.MapProject(kontentProject).Result;
+            var mappedProject = await KontentMappers.MapProject(kontentProject);
             
             Assert.NotNull(mappedProject);
             Assert.Equal(Name, mappedProject.Name);
@@ -33,22 +34,22 @@ namespace Har.Infrastructure.Tests.Mappers
         }
         
         [Fact]
-        public void KontentProject_ReturnsMappedProjectWithoutDate()
+        public async Task KontentProject_ReturnsMappedProjectWithoutDate()
         {
             var kontentProject = GetKontentProject();
 
-            var mappedProject = KontentMappers.MapProject(kontentProject).Result;
+            var mappedProject = await KontentMappers.MapProject(kontentProject);
             
             Assert.Null(mappedProject.OnlineSince);
         }
         
         [Fact]
-        public void KontentProject_ReturnsMappedProjectWithTechnologies()
+        public async Task KontentProject_ReturnsMappedProjectWithTechnologies()
         {
             const string technologies = "<ul><li>.NET Core</li><li>GraphQL</li>";
             var kontentProject = GetKontentProject(technologies: technologies);
 
-            var mappedProject = KontentMappers.MapProject(kontentProject).Result;
+            var mappedProject = await KontentMappers.MapProject(kontentProject);
             
             Assert.Collection(mappedProject.Technologies, technology =>
             {
@@ -59,7 +60,7 @@ namespace Har.Infrastructure.Tests.Mappers
             });
         }
 
-        private Project GetKontentProject(DateTime? onlineSince = null, string technologies = "")
+        private static Project GetKontentProject(DateTime? onlineSince = null, string technologies = "")
         {
             var customTypeProvider = new CustomTypeProvider();
 

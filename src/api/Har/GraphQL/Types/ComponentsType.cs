@@ -1,12 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Text.Encodings.Web;
+﻿using System.Text.Encodings.Web;
 using System.Text.Json;
-using GraphQL;
 using GraphQL.Language.AST;
 using GraphQL.Types;
 using Har.Application.JsonConverters;
-using Har.Domain.Components;
-using Har.GraphQL.ValueNodes;
 
 namespace Har.GraphQL.Types
 {
@@ -19,18 +15,12 @@ namespace Har.GraphQL.Types
 
         public override object ParseLiteral(IValue value)
         {
-            // new test
-            if (value is ComponentsValue componentsValue)
-                return ParseValue(componentsValue.Value);
-            
-            return value is StringValue stringValue
-                ? ParseValue(stringValue.Value)
-                : null;
+            return null;
         }
 
         public override object ParseValue(object value)
         {
-            return ValueConverter.ConvertTo(value, typeof(IEnumerable<IComponent>));
+            return null;
         }
 
         public override object Serialize(object value)

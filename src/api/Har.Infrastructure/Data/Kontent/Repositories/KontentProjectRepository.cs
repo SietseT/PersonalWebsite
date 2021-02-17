@@ -45,7 +45,5 @@ namespace Har.Infrastructure.Data.Kontent.Repositories
                 return default;
             }
         }
-
-        
     }
 }
