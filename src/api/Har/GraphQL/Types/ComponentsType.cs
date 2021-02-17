@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using GraphQL;
 using GraphQL.Language.AST;
@@ -37,7 +38,8 @@ namespace Har.GraphQL.Types
             return JsonSerializer.Serialize(value, new JsonSerializerOptions
             {
                 Converters = { new ComponentJsonConverter()},
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             });
             
             // return ValueConverter.ConvertTo(value, typeof(IEnumerable<IComponent>)); 

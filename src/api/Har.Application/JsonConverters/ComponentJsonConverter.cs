@@ -20,7 +20,7 @@ namespace Har.Application.JsonConverters
                     JsonSerializer.Serialize(writer, textComponent, typeof(TextComponent), options);
                     break;
                 case ImagesComponent imageComponent:
-                    JsonSerializer.Serialize(writer, imageComponent, typeof(TextComponent), options);
+                    JsonSerializer.Serialize(writer, imageComponent, typeof(ImagesComponent), options);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(value), $"Unknown implementation of the interface {nameof(IComponent)} for the parameter {nameof(value)}. Unknown implementation: {value?.GetType().Name}");
