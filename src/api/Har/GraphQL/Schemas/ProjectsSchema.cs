@@ -17,6 +17,7 @@ namespace Har.GraphQL.Schemas
         {
             var htmlComponentParser = provider.GetRequiredService<IComponentParser<string>>();
             ValueConverter.Register<string, IEnumerable<IComponent>>(htmlComponentParser.Parse);
+            
             RegisterValueConverter(new ComponentsAstValueConverter());
             
             Query = provider.GetRequiredService<ProjectsQuery>();
