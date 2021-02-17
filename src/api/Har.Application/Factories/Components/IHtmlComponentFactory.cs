@@ -1,12 +1,12 @@
 using System;
+using AngleSharp.Dom;
 using Har.Domain.Components;
-using HtmlAgilityPack;
 
 namespace Har.Application.Factories.Components
 {
     public interface IHtmlComponentFactory
     {
-        IComponent Create(HtmlNode htmlNode);
+        IComponent Create(IElement htmlElement);
         bool Accepts(Type type);
     }
 }

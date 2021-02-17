@@ -1,22 +1,22 @@
 using System;
 using System.Linq;
+using AngleSharp.Dom;
 using Har.Domain.Components;
-using HtmlAgilityPack;
 
 namespace Har.Application.Factories.Components
 {
     public class ImagesComponentFactory : IHtmlComponentFactory
     {
-        public IComponent Create(HtmlNode htmlNode)
+        public IComponent Create(IElement htmlElement)
         {
             var imageComponent = new ImagesComponent();
 
-            var imageNodes = htmlNode.SelectNodes("//img").ToArray();
+            var imageNodes = htmlElement.QuerySelectorAll("img").ToArray();
 
             imageComponent.Images = imageNodes.Select(imageNode =>
             {
-                var src = imageNode.GetAttributeValue("src", string.Empty);
-                var alt = imageNode.GetAttributeValue("alt", string.Empty);
+                var src = imageNode.GetAttribute("src");
+                var alt = imageNode.GetAttribute("alt");
                 return new Image(src, alt);
             });
 

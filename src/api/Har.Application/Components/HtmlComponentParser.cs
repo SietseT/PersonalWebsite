@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AngleSharp;
 using Har.Application.Factories.Components;
 using Har.Domain.Components;
 using Har.Domain.Factories;
-using HtmlAgilityPack;
 using Microsoft.Extensions.Logging;
 
 namespace Har.Application.Components
@@ -99,10 +99,10 @@ namespace Har.Application.Components
 
         private (IComponent Component, string ComponentHtml) GetHtmlComponent(string htmlString, IHtmlComponent htmlComponent)
         {
-            var htmlDocument = new HtmlDocument();
-            htmlDocument.LoadHtml(htmlString);
+            var context = BrowsingContext.New(Configuration.Default);
+            var htmlDocument = context.OpenAsync(req => req.Content(htmlString)).Result;
 
-            var componentNode = htmlDocument.DocumentNode.SelectSingleNode($"//div[@class=\"{htmlComponent.ContainerDivClass}\"][1]");
+            var componentNode = htmlDocument.QuerySelector($"div.{htmlComponent.ContainerDivClass}");
             if (componentNode == null)
             {
                 LogComponentParserWarning(htmlString, htmlComponent);

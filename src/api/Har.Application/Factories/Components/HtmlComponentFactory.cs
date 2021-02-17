@@ -1,7 +1,7 @@
 using System;
+using AngleSharp.Dom;
 using Har.Domain.Components;
 using Har.Domain.Factories;
-using HtmlAgilityPack;
 
 namespace Har.Application.Factories.Components
 {
@@ -9,14 +9,14 @@ namespace Har.Application.Factories.Components
     {
         private static IHtmlComponentFactory[] _htmlComponentFactories;
         
-        public static IComponent CreateComponent(HtmlNode htmlNode, Type htmlComponentType)
+        public static IComponent CreateComponent(IElement htmlElement, Type htmlComponentType)
         {
             _htmlComponentFactories ??= ReflectionFactory.GetComponentInstances();
 
             foreach (var htmlComponentFactory in _htmlComponentFactories)
             {
                 if (htmlComponentFactory.Accepts(htmlComponentType))
-                    return htmlComponentFactory.Create(htmlNode);
+                    return htmlComponentFactory.Create(htmlElement);
             }
 
             throw new Exception($"No IHtmlComponentFactory implemented for type {htmlComponentType}");
