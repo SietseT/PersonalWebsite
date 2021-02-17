@@ -61,6 +61,28 @@ namespace Har.Application.Tests.Components
             });
         }
 
+        [Fact]
+        public void HtmlString_ReturnsTwoTextComponentsAndOneImageComponent()
+        {
+            var htmlString = GetHtmlStringWithTwoTextComponentsAndOneImageComponent();
+            var componentParser = new HtmlComponentParser(_mockLogger);
+            
+            var components = componentParser.Parse(htmlString).ToArray();
+            
+            Assert.NotEmpty(components);
+            Assert.Equal(3, components.Length);
+            Assert.Collection(components, component =>
+            {
+                Assert.IsType<TextComponent>(component);
+            }, component =>
+            {
+                Assert.IsType<ImagesComponent>(component);
+            }, component =>
+            {
+                Assert.IsType<TextComponent>(component);
+            });
+        }
+
         private static string GetHtmlStringWithOneTextComponent()
         {
             return "<p>Text before</p>\n<p><br></p>\n<p><br></p>\n<h1>Elundus Core</h1>\n<p>Elundus Core is a website where you can convert text-to-speech using <a href=\"https://aws.amazon.com/polly/\" data-new-window=\"true\" target=\"_blank\" rel=\"noopener noreferrer\">Amazon Polly</a>. I've started building this tool when I used to watch <a href=\"https://www.twitch.tv/\" data-new-window=\"true\" target=\"_blank\" rel=\"noopener noreferrer\">Twitch</a> streams regularly.&nbsp;</p>\n<p><br></p>";
@@ -69,6 +91,11 @@ namespace Har.Application.Tests.Components
         private static string GetHtmlStringWithOneImageComponent()
         {
             return "<div class=\"image-slider\">\n<img src=\"https://assets-eu-01.kc-usercontent.com:443/7f506e42-9290-01aa-7e18-b07c3b2d973c/0ee58a9c-48c5-433f-aa89-671d665a6ce3/msedge_2DBLUL4Hgp.jpg\" alt=\"Elundus Core desktop view\">\n<img src=\"https://assets-eu-01.kc-usercontent.com:443/7f506e42-9290-01aa-7e18-b07c3b2d973c/e4a8b4e5-86c4-4b56-9557-bd4aa1fc53f1/msedge_4Ig7LdiDyX.jpg\" alt=\"Elundus Core mobile view\">\n</div>";
+        }
+
+        private static string GetHtmlStringWithTwoTextComponentsAndOneImageComponent()
+        {
+            return "<p>Text before</p>\n<p><br></p>\n<div class=\"image-slider\">\n<img src=\"https://assets-eu-01.kc-usercontent.com:443/7f506e42-9290-01aa-7e18-b07c3b2d973c/0ee58a9c-48c5-433f-aa89-671d665a6ce3/msedge_2DBLUL4Hgp.jpg\" alt=\"Elundus Core desktop view\">\n<img src=\"https://assets-eu-01.kc-usercontent.com:443/7f506e42-9290-01aa-7e18-b07c3b2d973c/e4a8b4e5-86c4-4b56-9557-bd4aa1fc53f1/msedge_4Ig7LdiDyX.jpg\" alt=\"Elundus Core mobile view\">\n</div>\n\n<p><br></p>\n<h1>Elundus Core</h1>\n<p>Elundus Core is a website where you can convert text-to-speech using <a href=\"https://aws.amazon.com/polly/\" data-new-window=\"true\" target=\"_blank\" rel=\"noopener noreferrer\">Amazon Polly</a>. I've started building this tool when I used to watch <a href=\"https://www.twitch.tv/\" data-new-window=\"true\" target=\"_blank\" rel=\"noopener noreferrer\">Twitch</a> streams regularly.&nbsp;</p>\n<p><br></p>";
         }
     }
 }

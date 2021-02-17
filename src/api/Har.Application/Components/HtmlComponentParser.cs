@@ -40,60 +40,76 @@ namespace Har.Application.Components
 
         private IComponent GetNextComponent(ref string htmlString)
         {
+            var (nextComponentIndex, nextHtmlComponent) = GetNextComponentIndex(htmlString);
+
+            switch (nextComponentIndex)
+            {
+                case -1:
+                {
+                    //No components are found, it's all a TextComponent
+                    var textComponent = new TextComponent
+                    {
+                        Content = htmlString
+                    };
+
+                    htmlString = string.Empty;
+
+                    return textComponent;
+                }
+                case > 0:
+                {
+                    //Component is found, but until that index we handle it as a textcomponent
+                    var htmlUntilNextComponent = htmlString.Substring(0, nextComponentIndex);
+                    
+                    htmlString = htmlString.Substring(nextComponentIndex);
+                
+                    return new TextComponent
+                    {
+                        Content = htmlUntilNextComponent
+                    };
+                }
+            }
+
+            //Index is 0, so the next HTML will be a component
+            var (component, componentHtml) = GetHtmlComponent(htmlString, nextHtmlComponent);
+            htmlString = htmlString.Replace(componentHtml, string.Empty);
+
+            return component;
+        }
+
+        private static (int NextComponentIndex, IHtmlComponent NextHtmlComponent) GetNextComponentIndex(string htmlString)
+        {
             var nextComponentIndex = -1;
             IHtmlComponent nextHtmlComponent = null;
             
-            foreach (var htmlComponent in _htmlComponents)
+            foreach (var htmlComponent in _htmlComponents.Where(c => !string.IsNullOrWhiteSpace(c.ContainerDivClass)))
             {
-                var componentContainerDiv = $"<div class\"{htmlComponent.ContainerDivClass}\">";
+                var componentContainerDiv = $"<div class=\"{htmlComponent.ContainerDivClass}\">";
                 var containerDivIndex = htmlString.IndexOf(componentContainerDiv, StringComparison.OrdinalIgnoreCase);
 
-                if (nextComponentIndex == -1 || containerDivIndex < nextComponentIndex)
+                if (nextComponentIndex == -1 && containerDivIndex != -1 || containerDivIndex < nextComponentIndex)
                 {
                     nextComponentIndex = containerDivIndex;
                     nextHtmlComponent = htmlComponent;
                 }
             }
-
-            if (nextComponentIndex == -1)
-                return new TextComponent
-                {
-                    Content = htmlString
-                };
-
-            IComponent component;
-
-            if (nextComponentIndex > 0)
-            {
-                var htmlUntilNextComponent = htmlString.Substring(0, nextComponentIndex);
-                component = new TextComponent
-                {
-                    Content = htmlUntilNextComponent
-                };
-            }
-            else
-                component = GetHtmlComponent(htmlString, nextHtmlComponent);
-
-
-            //Use substring, so this component is not processed again
-            htmlString = htmlString.Substring(0, nextComponentIndex);
             
-            return component;
+            return (nextComponentIndex, nextHtmlComponent);
         }
 
-        private IComponent GetHtmlComponent(string htmlString, IHtmlComponent htmlComponent)
+        private (IComponent Component, string ComponentHtml) GetHtmlComponent(string htmlString, IHtmlComponent htmlComponent)
         {
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(htmlString);
 
-            var componentNode = htmlDocument.DocumentNode.SelectSingleNode($"//div[@class=\"{htmlComponent.ContainerDivClass}\"[0]");
+            var componentNode = htmlDocument.DocumentNode.SelectSingleNode($"//div[@class=\"{htmlComponent.ContainerDivClass}\"][1]");
             if (componentNode == null)
             {
                 LogComponentParserWarning(htmlString, htmlComponent);
                 return default;
             }
 
-            return HtmlComponentFactory.CreateComponent(componentNode, htmlComponent.GetType());
+            return (HtmlComponentFactory.CreateComponent(componentNode, htmlComponent.GetType()), componentNode.OuterHtml);
         }
 
         private void LogComponentParserWarning(string htmlString, IHtmlComponent htmlComponent)
