@@ -6,7 +6,6 @@ using GraphQL.Utilities;
 using Har.Application.Components;
 using Har.Domain.Components;
 using Har.GraphQL.Queries;
-using Har.GraphQL.Types;
 
 namespace Har.GraphQL.Schemas
 {
@@ -18,8 +17,6 @@ namespace Har.GraphQL.Schemas
             ValueConverter.Register<string, IEnumerable<IComponent>>(htmlComponentParser.Parse);
 
             Query = provider.GetRequiredService<ProjectsQuery>();
-            
-            RegisterType<TextComponentType>();
         }
     }
 }
