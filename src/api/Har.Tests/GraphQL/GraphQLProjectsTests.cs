@@ -135,10 +135,7 @@ namespace Har.Tests.GraphQL
 
             var results = contentJobject["data"]?["projects"]?.Children().ToArray();
 
-            if (results == null)
-                return System.Array.Empty<Project>();
-
-            return results.Select(result => result.ToObject<Project>()).ToList();
+            return results!.Select(result => result.ToObject<Project>()).ToList();
         }
         
         private static async Task<Project> GetProjectFromResponse(HttpResponseMessage response)
