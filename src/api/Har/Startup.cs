@@ -1,13 +1,10 @@
 using GraphQL.Server;
 using GraphQL.Types;
 using Har.Application.Components;
-using Har.Application.Services;
-using Har.GraphQL.Interfaces;
 using Har.GraphQL.Queries;
 using Har.GraphQL.Schemas;
 using Har.GraphQL.Types;
 using Har.Infrastructure;
-using Har.Infrastructure.Data.Kontent.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -40,9 +37,6 @@ namespace Har
             
             services.AddSingleton<ProjectType>();
             services.AddSingleton<ProjectsQuery>();
-            
-            services.AddSingleton<ComponentInterface>();
-            services.AddSingleton<TextComponentType>();
 
             services.AddSingleton<ISchema, ProjectsSchema>();
 

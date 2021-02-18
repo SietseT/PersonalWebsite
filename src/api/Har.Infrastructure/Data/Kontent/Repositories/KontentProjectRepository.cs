@@ -42,7 +42,7 @@ namespace Har.Infrastructure.Data.Kontent.Repositories
             catch (Exception ex)
             {
                 _logger.LogError(ex, "API error executing {Method}", nameof(GetProjectsAsync));
-                return default;
+                return Array.Empty<Domain.Models.Project>();
             }
         }
     }

@@ -31,8 +31,6 @@ namespace Har.GraphQL.Types
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             });
-            
-            // return ValueConverter.ConvertTo(value, typeof(IEnumerable<IComponent>)); 
         }
     }
 }

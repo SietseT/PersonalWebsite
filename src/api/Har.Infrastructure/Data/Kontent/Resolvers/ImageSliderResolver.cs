@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using Har.Domain.Components;
 using Har.Infrastructure.Data.Kontent.Types;
@@ -10,19 +11,19 @@ namespace Har.Infrastructure.Data.Kontent.Resolvers
     {
         public string Resolve(ImageSlider data)
         {
-            if (data == null || !data.Images.Any())
+            if (data?.Images == null || !data.Images.Any())
                 return string.Empty;
 
             var htmlBuilder = new StringBuilder();
-            htmlBuilder.AppendLine($"<div class=\"{new ImagesComponent().ContainerDivClass}\">");
+            htmlBuilder.Append($"<div class=\"{new ImagesComponent().ContainerDivClass}\">");
 
             foreach (var image in data.Images)
             {
                 var imageHtml = $"<img src=\"{image.Url}\" alt=\"{image.Description}\" />";
-                htmlBuilder.AppendLine(imageHtml);
+                htmlBuilder.Append(imageHtml);
             }
 
-            htmlBuilder.AppendLine("</div>");
+            htmlBuilder.Append("</div>");
             return htmlBuilder.ToString();
         }
     }
