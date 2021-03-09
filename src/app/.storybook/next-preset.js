@@ -29,11 +29,11 @@ module.exports = {
         newConfig.resolve.extensions.push('.ts', '.tsx');
 
         // SCSS
-        newConfig.module.rules.push({
-            test: /\.(s*)css$/,
-            loaders: ['style-loader', 'css-loader', 'sass-loader'],
-            include: path.resolve(__dirname, '../styles/global.scss'),
-        });
+        //newConfig.module.rules.push({
+        //    test: /\.(s*)css$/,
+        //    loaders: ['style-loader', 'css-loader', 'sass-loader'],
+        //    include: path.resolve(__dirname, '../styles/global.scss'),
+        //});
 
         // If you are using CSS Modules, check out the setup from Justin (justincy)
         // Many thanks to Justin for the inspiration
